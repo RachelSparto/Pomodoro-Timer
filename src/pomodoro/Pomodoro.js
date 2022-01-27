@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import classNames from "../utils/class-names";
 import useInterval from "../utils/useInterval";
 import SessionControl from "./SessionControl";
-import increaseAndDecrease from "./IncreaseandDecrease";
+import IncreaseAndDecrease from "./IncreaseandDecrease";
 import TimerControl from "./TimerControl";
 
 // These functions are defined outside of the component to ensure they do not have access to state
@@ -126,13 +126,12 @@ function Pomodoro() {
 
   return (
     <div className="pomodoro">
-      <increaseAndDecrease
+      <IncreaseAndDecrease
         handleBreak={handleBreak}
         handleFocus={handleFocus}
         focusDuration={focusDuration}
         breakDuration={breakDuration}
       />
-
       <TimerControl />
       <div className="row">
         <div className="col">
