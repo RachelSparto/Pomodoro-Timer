@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import classNames from "../utils/class-names";
 import useInterval from "../utils/useInterval";
+import SessionControl from "./SessionControl";
+import increaseAndDecrease from "./IncreaseandDecrease";
+import TimerControl from "./TimerControl";
 
 // These functions are defined outside of the component to ensure they do not have access to state
 // and are, therefore, more likely to be pure.
@@ -53,9 +56,9 @@ function Pomodoro() {
   // The current session - null where there is no session running
   const [session, setSession] = useState(null);
 
-  // ToDo: Allow the user to adjust the focus and break duration.
-  const focusDuration = 25;
-  const breakDuration = 5;
+  // Allow the user to adjust the focus and break duration.
+  const [focusDuration, setFocusDuration] = useState(25);
+  const [breakDuration, setBreakDuration] = useState(5);
 
   /**
    * Custom hook that invokes the callback function every second
@@ -96,64 +99,41 @@ function Pomodoro() {
     });
   }
 
+  const handleFocus = (event) => {
+    const minDuration = 5;
+    const maxDuration = 60;
+    if (focusDuration > minDuration && event.target.id === "decrease") {
+      setFocusDuration((currentDuration) => currentDuration - 5);
+    } else if (focusDuration < maxDuration && event.target.id === "increase") {
+      setFocusDuration((currentDuration) => currentDuration + 5);
+    }
+  };
+
+  const handleBreak = (event) => {
+    const minDuration = 1;
+    const maxDuration = 15;
+    if (breakDuration > minDuration && event.target.id === "decrease") {
+      setBreakDuration((currentDuration) => currentDuration - 1);
+    } else if (breakDuration < maxDuration && event.target.id === "increase") {
+      setBreakDuration((currentDuration) => currentDuration + 1);
+    }
+  };
+
+  const handleStopSession = () => {
+    setIsTimerRunning(false);
+    setSession(null);
+  };
+
   return (
     <div className="pomodoro">
-      <div className="row">
-        <div className="col">
-          <div className="input-group input-group-lg mb-2">
-            <span className="input-group-text" data-testid="duration-focus">
-              {/* TODO: Update this text to display the current focus session duration */}
-              Focus Duration: 25:00
-            </span>
-            <div className="input-group-append">
-              {/* TODO: Implement decreasing focus duration and disable during a focus or break session */}
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-testid="decrease-focus"
-              >
-                <span className="oi oi-minus" />
-              </button>
-              {/* TODO: Implement increasing focus duration and disable during a focus or break session */}
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-testid="increase-focus"
-              >
-                <span className="oi oi-plus" />
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="float-right">
-            <div className="input-group input-group-lg mb-2">
-              <span className="input-group-text" data-testid="duration-break">
-                {/* TODO: Update this text to display the current break session duration */}
-                Break Duration: 05:00
-              </span>
-              <div className="input-group-append">
-                {/* TODO: Implement decreasing break duration and disable during a focus or break session*/}
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-testid="decrease-break"
-                >
-                  <span className="oi oi-minus" />
-                </button>
-                {/* TODO: Implement increasing break duration and disable during a focus or break session*/}
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-testid="increase-break"
-                >
-                  <span className="oi oi-plus" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <increaseAndDecrease
+        handleBreak={handleBreak}
+        handleFocus={handleFocus}
+        focusDuration={focusDuration}
+        breakDuration={breakDuration}
+      />
+
+      <TimerControl />
       <div className="row">
         <div className="col">
           <div
@@ -176,19 +156,23 @@ function Pomodoro() {
                 })}
               />
             </button>
-            {/* TODO: Implement stopping the current focus or break session. and disable the stop button when there is no active session */}
-            {/* TODO: Disable the stop button when there is no active session */}
+            {/* Implement stopping the current focus or break session. and disable the stop button when there is no active session */}
+            {/* Disable the stop button when there is no active session */}
             <button
               type="button"
               className="btn btn-secondary"
               data-testid="stop"
               title="Stop the session"
+              onClick={handleStopSession}
+              disabled={!session}
             >
               <span className="oi oi-media-stop" />
             </button>
           </div>
         </div>
       </div>
+
+      <SessionControl />
       <div>
         {/* TODO: This area should show only when there is an active focus or break - i.e. the session is running or is paused */}
         <div className="row mb-2">
