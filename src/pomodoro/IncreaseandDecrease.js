@@ -1,4 +1,5 @@
 import React from "react";
+import { minutesToDuration } from "../utils/duration";
 
 function IncreaseAndDecrease({
   handleBreak,
@@ -12,7 +13,7 @@ function IncreaseAndDecrease({
         <div className="input-group input-group-lg mb-2">
           <span className="input-group-text" data-testid="duration-focus">
             {/*Update this text to display the current focus session duration */}
-            Focus Duration: {focusDuration}:00
+            Focus Duration: {minutesToDuration(focusDuration)}
           </span>
           <div className="input-group-append">
             {/*Implement decreasing focus duration and disable during a focus or break session */}
@@ -43,7 +44,7 @@ function IncreaseAndDecrease({
           <div className="input-group input-group-lg mb-2">
             <span className="input-group-text" data-testid="duration-break">
               {/* Update this text to display the current break session duration */}
-              Break Duration: {breakDuration}:00
+              Break Duration: {minutesToDuration(breakDuration)}
             </span>
             <div className="input-group-append">
               {/* Implement decreasing break duration and disable during a focus or break session*/}
