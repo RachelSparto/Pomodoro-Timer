@@ -3,7 +3,6 @@ import useInterval from "../utils/useInterval";
 import SessionControl from "./SessionControl";
 import IncreaseAndDecrease from "./IncreaseandDecrease";
 import TimerControl from "./TimerControl";
-import { minutesToDuration, secondsToDuration } from "../utils/duration";
 
 // These functions are defined outside of the component to ensure they do not have access to state
 // and are, therefore, more likely to be pure.
